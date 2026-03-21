@@ -38,6 +38,8 @@ The system relies on three distinct machine learning models:
 ├── app.py                                 # The command-line app running the system
 └── README.md                              # Project documentation
 
+```
+
 ## Technical Pipeline
 **Phase 1:** Tabular Data (Product Recommendation)
 Data Merging: Merged customer_social_profiles and customer_transactions using an inner join to preserve data integrity.
