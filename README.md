@@ -38,33 +38,33 @@ The system relies on three distinct machine learning models:
 ├── app.py                                 # The command-line app running the system
 └── README.md                              # Project documentation
 
- Technical Pipeline
-Phase 1: Tabular Data (Product Recommendation)
+## Technical Pipeline
+**Phase 1:** Tabular Data (Product Recommendation)
 Data Merging: Merged customer_social_profiles and customer_transactions using an inner join to preserve data integrity.
 
 Exploratory Data Analysis (EDA): Handled null values, fixed data types, and generated visualizations (distribution plots, outliers, correlation heatmaps) to analyze purchasing behavior.
 
 Modeling: Evaluated and trained classifiers (Random Forest, XGBoost) to predict the most likely product purchase based on user demographics and social behavior. Saved the optimal model as product_recommendation_model.pkl.
 
-Phase 2: Image Processing (Facial Recognition)
-Data Collection: 3 base images per team member (Neutral, Smiling, Surprised).
+**Phase 2:** Image Processing (Facial Recognition)
+- **Data Collection:** 3 base images per team member (Neutral, Smiling, Surprised).
 
-Augmentation: Applied horizontal flipping, 90-degree rotation, and grayscale conversion using cv2 to artificially expand the dataset and improve model robustness.
+- **Augmentation:** Applied horizontal flipping, 90-degree rotation, and grayscale conversion using cv2 to artificially expand the dataset and improve model robustness.
 
-Feature Extraction: Extracted a 512-dimensional feature vector per image using a 3D RGB Color Histogram (8x8x8 bins).
+- **Feature Extraction:** Extracted a 512-dimensional feature vector per image using a 3D RGB Color Histogram (8x8x8 bins).
 
-Modeling: Evaluated Random Forest, Logistic Regression, and XGBoost based on Accuracy, F1-Score, and Log Loss. The optimal model was saved as image_recognition_model.pkl.
+- **Modeling:** Evaluated Random Forest, Logistic Regression, and XGBoost based on Accuracy, F1-Score, and Log Loss. The optimal model was saved as image_recognition_model.pkl.
 
-Phase 3: Audio Processing (Voiceprint Verification)
+**Phase 3:** Audio Processing (Voiceprint Verification)
 Data Collection: 2 audio samples per team member speaking specific passphrases ("Yes, approve" and "Confirm transaction").
 
-Augmentation: Applied a 2-semitone pitch shift and a 1.2x time stretch using librosa to simulate natural variations in vocal tone and speaking speed.
+- **Augmentation:** Applied a 2-semitone pitch shift and a 1.2x time stretch using librosa to simulate natural variations in vocal tone and speaking speed.
 
-Feature Extraction: Extracted 15 engineered features per clip (13 MFCCs, Spectral Roll-off, and RMS Energy).
+- **Feature Extraction:** Extracted 15 engineered features per clip (13 MFCCs, Spectral Roll-off, and RMS Energy).
 
-Modeling: Scaled features using StandardScaler and trained a Logistic Regression classifier, which achieved the lowest Log Loss due to its efficiency in finding linear boundaries in small tabular datasets. Saved as best_voice_model.pkl.
+- **Modeling:** Scaled features using StandardScaler and trained a Logistic Regression classifier, which achieved the lowest Log Loss due to its efficiency in finding linear boundaries in small tabular datasets. Saved as best_voice_model.pkl.
 
-Phase 4: System Integration & Multimodal Logic
+**Phase 4:** System Integration & Multimodal Logic
 The final pipeline operates on strict sequential logic via app.py:
 
 The user submits a test image. The Facial Recognition model predicts Face_ID. If unknown, the system outputs Access Denied.
@@ -75,20 +75,18 @@ Cross-Check: The system compares Face_ID and Voice_ID. If they do not match perf
 
 Only upon a verified multimodal match does the system query the tabular dataset and output the user's personalized product recommendation.
 
- How to Run the Simulation
+## How to Run the Simulation
 1. Install Dependencies
 Ensure you have Python installed, then install the required libraries:
 
-Bash
-pip install numpy pandas scikit-learn xgboost opencv-python librosa joblib
+'pip install numpy pandas scikit-learn xgboost opencv-python librosa joblib'
 2. Run the Command-Line App
 Execute the main simulation script from the root directory.
 
 To test an Authorized flow (Matching Biometrics):
 
-Bash
-python app.py --face "data/raw-images/yinka/neutral.jpeg" --voice "data/raw-audio/Yinka_1.ogg" --customer_id 150 --speaker yinka
+'python app.py --face "data/raw-images/yinka/neutral.jpeg" --voice "data/raw-audio/Yinka_1.ogg" --customer_id 150 --speaker yinka'
+
 To test an Unauthorized flow (Spoofing/Mismatched Biometrics):
 
-Bash
-python app.py --simulate_unauthorized --type voice --speaker florence# multimodal-auth-recommendation-system
+'python app.py --simulate_unauthorized --type voice --speaker florence# multimodal-auth-recommendation-system'
